@@ -1,84 +1,3 @@
-Data
-관찰결과로나타난정량적혹은정성적인실제값
-
-정보
-데이터를기반으로의미를부여한것
-
-* 에베레스트의높이: 8848m  Data
-에베레스트는세계에서가장높은산이다. 정보
-
-Database
-한조직에필요한정보를여러응용시스템에서공용할수있도록
-논리적으로연관된데이터를모으고중복되는데이터를최소화하여
-구조적으로통합/저장해놓은것
-
-* 데이터 무결성 : 
-
-//
-
-DB의 데이터 타입 :
-1. 문자열(고정, 가변)
-2. 숫자
-3. 날짜
-4. 큰 데이터
-
-//
-
-SELECT : 지정된 테이블에서 원하는 데이터를 선택해서 조회하는 SQL
-
-컬럼명 별칭 지정하기
-
-별칭 지정 방법
-1) 컬럼명 AS 별칭   : 문자O, 띄어쓰기 X, 특수문자 X
-2) 컬럼명 AS "별칭" : 문자O, 띄어쓰기 O, 특수문자 O
-3) 컬럼명 별칭      : 문자O, 띄어쓰기 X, 특수문자 X
-4) 컬럼명 "별칭"    : 문자O, 띄어쓰기 O, 특수문자 O
-
-"" 의미 ("" 사이 글자 그대로 인식)
-1) 대/소문자 구분
-2) 특수문자, 띄어쓰기 인식
--- ORACLE에서 문자열은 ''
-
-/******************/
-/**** WHERE 절 ****/
-/******************/
-
--- 테이블에서 조건을 충족하는 행을 조회할 때 사용
--- WHERE절에는 조건식(true/false)만 작성
-
--- 비교 연산자 : >, <, >=, <=, = (같다), !=, <> (같지 않다)
--- 논리 연산자 : AND, OR, NOT
-
-/*NULL 비교하기*/
---  컬럼명 = NULL  / 컬럼명 != NULL   (X)
---> =, !=, < 등의 비교 연산자는 값을 비교하는 연산자!!
---> DB에서 NULL은 값 X, 저장된 값이 없다라는 의미!!!
-
--- 컬럼명 IS NULL, 컬럼명 IS NOT NULL (O)
-	--> 컬럼 값이 존재하지 않는 경우 / 존재하는 경우
-
-/* 컬럼명 BETWEEN A AND B */
-	-- 컬럼의 값이 A 이상 B 이하면 TRUE
-
-/* 컬럼명 NOT BETWEEN A AND B */
-	-- 컬럼의 값이 A 이상 B 이하면 TRUE
-	--> A 미만 또는 B 초과 시 TRUE
-
-    -- EMPLOYEE 테이블에서
--- 이메일의 아이디 중 '_' 앞 쪽 글자의 수가 3글자인 사원의
--- 사번, 이름, 이메일 조회
---SELECT EMP_NAME , EMAIL 
---FROM EMPLOYEE e 
---WHERE EMAIL LIKE '____%';
-
--- 문제점 : 기준으로 삼은 문자 '_'와
--- LIKE의 와일드카드 '_'가 동일하여
--- 모든 '_'가 와일드 카드로 인식됨
-
--- 해결 방법 : 
--- LIKE의 ESCAPE 옵션 사용
---> 적용 범위 : 특수문자 뒤 한 글자
-
 /* SELECT문 해석 순서
   5 : SELECT 컬럼명 AS 별칭, 계산식, 함수식
   1 : FROM 참조할 테이블명
@@ -102,12 +21,25 @@ SELECT : 지정된 테이블에서 원하는 데이터를 선택해서 조회하
 
 
 -- EMPLOYEE 테이블에서 부서코드, 부서(그룹) 별 급여 합계 조회
+			/* 묶인 그룹 이름 */
+SELECT DEPT_CODE, SUM(SALARY) -- 그룹별로 그룹함수(SUM) 연산 수행
+FROM EMPLOYEE
+GROUP BY DEPT_CODE; -- EMPLOYEE 테이블에서
+										-- DEPT_CODE 컬럼값이 같은 행들끼리 묶음(그룹)
+
+SELECT DEPT_CODE
+FROM EMPLOYEE e; 
+--GROUP BY DEPT_CODE;
 
 
 
 -- EMPLOYEE 테이블에서 
 -- 부서코드, 부서 별 급여의 합계, 부서 별 급여의 평균(정수처리), 인원 수를 조회하고 
 -- 부서 코드 순으로 정렬
+SELECT DEPT_CODE, SUM(SALARY), FLOOR(AVG(SALARY)), COUNT(*)
+FROM EMPLOYEE e 
+GROUP BY DEPT_CODE
+ORDER BY DEPT_CODE;
 
 
 
@@ -115,11 +47,30 @@ SELECT : 지정된 테이블에서 원하는 데이터를 선택해서 조회하
 -- 부서코드와 부서별 보너스를 받는 사원의 수를 조회하고 
 -- 부서코드 순으로 정렬
 
+-- 6행
+SELECT DEPT_CODE, COUNT(*)
+FROM EMPLOYEE e
+WHERE BONUS IS NOT NULL
+GROUP BY DEPT_CODE
+ORDER BY DEPT_CODE;
+
+-- 7행
+SELECT DEPT_CODE, COUNT(BONUS) /*NULL인 행 빼고 카운트*/
+FROM EMPLOYEE e 
+GROUP BY DEPT_CODE 
+ORDER BY DEPT_CODE ;
 
 
 -- EMPLOYEE 테이블에서
 -- 성별과 성별 별 급여 평균(정수처리), 급여 합계, 인원 수 조회하고
 -- 인원수로 내림차순 정렬
+SELECT DECODE(SUBSTR(EMP_NO, 8, 1), 1, '남', 2, '여') 성별,
+	FLOOR(AVG(SALARY)) "급여 평균",
+	SUM(SALARY) "급여 합계",
+	COUNT(*) "인원 수"
+FROM EMPLOYEE
+GROUP BY DECODE(SUBSTR(EMP_NO, 8, 1), 1, '남', 2, '여')
+ORDER BY "인원 수";
 
 
 
@@ -128,10 +79,17 @@ SELECT : 지정된 테이블에서 원하는 데이터를 선택해서 조회하
 
 
 -- EMPLOYEE 테이블에서 부서코드가 'D5', 'D6'인 부서의 평균 급여 조회
+SELECT DEPT_CODE, FLOOR(AVG(SALARY)) "평균 급여"
+FROM EMPLOYEE e 
+WHERE DEPT_CODE IN ('D5', 'D6')
+GROUP BY DEPT_CODE;
 
 
 -- EMPLOYEE 테이블에서 직급 별 2000년도 이후 입사자들의 급여 합을 조회
-
+SELECT JOB_CODE, SUM(SALARY)
+FROM EMPLOYEE 
+WHERE EXTRACT(YEAR FROM HIRE_DATE) >= 2000
+GROUP BY JOB_CODE;
 
 
 
@@ -144,28 +102,48 @@ SELECT : 지정된 테이블에서 원하는 데이터를 선택해서 조회하
 
 -- EMPLOYEE 테이블에서 부서 별로 같은 직급인 사원의 급여 합계를 조회하고
 -- 부서 코드 오름차순으로 정렬
+SELECT DEPT_CODE, JOB_CODE, SUM(SALARY)
+FROM EMPLOYEE e 
+GROUP BY DEPT_CODE, JOB_CODE
+ORDER BY DEPT_CODE;
 
 
 -- EMPLOYEE 테이블에서 부서 별로 급여 등급이 같은 직원의 수를 조회하고
 -- 부서코드, 급여 등급 오름차순으로 정렬
-
+SELECT DEPT_CODE , SAL_LEVEL , COUNT(*)
+FROM EMPLOYEE e 
+GROUP BY DEPT_CODE , SAL_LEVEL 
+ORDER BY DEPT_CODE , SAL_LEVEL ;
 
 
 
 
 --------------------------------------------------------------------------------------------------------------------------
+-- * WHERE 절 : 지정된 테이블에서 어떤 행만을 조회 결과로 삼을건지
+--						조건을 지정하는 구문
+--						(테이블 내에 특정 행만 뽑아서 쓰겠다는 조건문)
 
 -- * HAVING 절 : 그룹함수로 구해 올 그룹에 대한 조건을 설정할 때 사용
+-- (그룹에 대한 조건, 어떤 그룹만 조회하겠다)
 -- HAVING 컬럼명 | 함수식 비교연산자 비교값
 
--- 부서별 평균가 급여 3000000원 이상인 부서를 조회하여 부서코드 오름차순으로 정렬
 
+-- 부서별 평균가 급여 3000000원 이상인 부서를 조회하여 부서코드 오름차순으로 정렬
+SELECT DEPT_CODE , AVG(SALARY)
+FROM EMPLOYEE e 
+-- WHERE SALARY >= 3000000 -- 급여가 300만 이상인 행(사원)만 조회하겠다
+GROUP BY DEPT_CODE
+HAVING AVG(SALARY) >= 3000000 -- 그룹 급여 평균이 300만 이상인 그룹만 조회
+ORDER BY DEPT_CODE ;
 
 
 -- 부서별 그룹의 급여 합계 중 9백만원을 초과하는 부서코드와 급여 합계 조회
 -- 부서 코드 순으로 정렬
-
-
+SELECT DEPT_CODE , SUM(SALARY)
+FROM EMPLOYEE e 
+GROUP BY DEPT_CODE
+HAVING SUM(SALARY) >= 9000000
+ORDER BY DEPT_CODE ;
 
 
                       
@@ -173,19 +151,31 @@ SELECT : 지정된 테이블에서 원하는 데이터를 선택해서 조회하
 
 -- 1. EMPLOYEE 테이블에서 각 부서별 가장 높은 급여, 가장 낮은 급여를 조회하여
 -- 부서 코드 오름차순으로 정렬하세요.
-
+SELECT DEPT_CODE, MAX(SALARY), MIN(SALARY)
+FROM EMPLOYEE e 
+GROUP BY DEPT_CODE
+ORDER BY DEPT_CODE;
 
 
 -- 2.EMPLOYEE 테이블에서 각 직급별 보너스를 받는 사원의 수를 조회하여
 -- 직급코드 오름차순으로 정렬하세요
-
-
+SELECT JOB_CODE, COUNT(BONUS)
+FROM EMPLOYEE e
+GROUP BY JOB_CODE
+ORDER BY JOB_CODE;
 
 -- 3.EMPLOYEE 테이블에서 
 -- 부서별 70년대생의 급여 평균이 300만 이상인 부서를 조회하여
 -- 부서 코드 오름차순으로 정렬하세요
-               
-                      
+SELECT DEPT_CODE, FLOOR(AVG(SALARY)) "급여 평균"
+FROM
+EMPLOYEE e
+WHERE
+TO_NUMBER(SUBSTR(EMP_NO, 1, 1)) = '7'
+GROUP BY
+DEPT_CODE
+HAVING AVG(SALARY) >= 3000000
+ORDER BY DEPT_CODE;        
                       
 --------------------------------------------------------------------------------------------------------------                     
 
@@ -252,10 +242,32 @@ WHERE DEPT_CODE IS NULL;
 -- UNION : 여러개의 쿼리 결과를 하나로 합치는 연산자
 -- 중복된 영역을 제외하여 하나로 합친다.
 
+-- 부서코드가 'D5' 조회
+SELECT EMP_NAME, DEPT_CODE
+FROM EMPLOYEE e 
+WHERE DEPT_CODE = 'D5'
+
+UNION 
+
+-- 부서코드가 'D6' 조회
+SELECT EMP_NAME, DEPT_CODE
+FROM EMPLOYEE e 
+WHERE DEPT_CODE = 'D6';
 
 
 -- INTERSECT : 여러개의 SELECT한 결과에서 공통 부분만 결과로 추출 (교집합)
 
+-- 1) 부서코드가 'D5'
+SELECT EMP_NAME, DEPT_CODE, SALARY 
+FROM EMPLOYEE e 
+WHERE DEPT_CODE = 'D5';
+
+INTERSECT 
+
+-- 2) 급여가 300만 초과
+SELECT EMP_NAME, DEPT_CODE, SALARY
+FROM EMPLOYEE e 
+WHERE SALARY > 3000000;
 
 
 
@@ -263,36 +275,67 @@ WHERE DEPT_CODE IS NULL;
 -- UNION과의 차이점은 중복영역을 모두 포함시킨다. (합집합 +  교집합)
 
 
+-- 부서코드가 'D5' 이거나 급여가 300만 초과하는 사원의
+-- 이름, 부서코드, 급여 조회 (중복 포함)
+
+-- 1) 부서코드가 'D5'
+SELECT EMP_NAME, DEPT_CODE, SALARY
+FROM EMPLOYEE
+WHERE DEPT_CODE = 'D5'
+
+UNION ALL
+
+-- 2) 급여가 300만 초과
+SELECT EMP_NAME, DEPT_CODE, SALARY
+FROM EMPLOYEE
+WHERE SALARY > 3000000;
+
+
+
 
 -- MINUS : 선행 SELECT 결과에서 다음 SELECT 결과와 겹치는 부분을 제외한 나머지 부분만 추출(차집합)
 -- 부서 코드 D5 중 급여가 300만 초과인 직원 제외
 
 
+SELECT EMP_NAME, DEPT_CODE, SALARY
+FROM EMPLOYEE
+WHERE DEPT_CODE = 'D5'
+
+MINUS
+
+SELECT EMP_NAME, DEPT_CODE, SALARY
+FROM EMPLOYEE
+WHERE SALARY > 3000000;
+
+---------------------------------------------
+
+-- 집합 연산자 실제 사용 예시
+
+-- * 집합 연산자 사용 시
+--   컬럼의 타입만 일치하면 연산 수행이 가능하다 *
 
 
--- SELECT 관련 KEY POINT !! --
- * 1. 테이블 구조 파악
- * 2. SELECT 해석 순서
- *   + 별칭 사용이 가능한 부분
- *    EX) ORDER BY 절에서는 SELECT절에서 해석된 별칭 사용 가능
- * 	  EX) 인라인뷰에서 지정된 별칭을 메인쿼리에서도 똑같이 사용해야된다
- * 
- * 3. 여러 테이블을 이용한 SELECT 진행 시
- *    컬럼명이 겹치는 경우 이를 해결하는 방법
- * 	
- *    EX) 셀프 조인 -> 테이블별로 별칭 지정
- *    EX) 상관 쿼리 -> 테이블별로 별칭 지정
- *
- *    EX) 다른 테이블이여도 컬럼명이 같을 때
- *      -> 테이블별로 별칭 지정
- *       -> 테이블명.컬럼명 형식으로 작성
- *        
- *  4. 조회하려는 데이터 (목적, 요구사항)을 확실하게 파악
+SELECT
+	EMP_NAME,
+	SALARY
+FROM
+	EMPLOYEE
+WHERE
+	EMP_ID = 200
+UNION
+SELECT
+	PHONE,
+	1000000
+FROM
+	EMPLOYEE
+WHERE
+	EMP_ID = 201
+UNION
+SELECT
+	'홍길동',
+	4000000
+FROM
+	DUAL;
 
-해석 순서
- 5) SELECT - 컬럼 지정
- 1) FROM + JOIN - 테이블 설정
- 2) WHERE - 행선택
- 3) GROUP BY - 그룹화
- 4) HAVING - 그룹 조건
- 6) ORDER BY - 정렬
+
+
