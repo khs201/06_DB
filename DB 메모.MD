@@ -333,3 +333,114 @@ khk 라는 계정 생성
 
 유저명 varchar2(100)
 varchar2 란 : 숫자 영어 한글 등 모든 문자를 넣을 수 있는 공간
+
+//
+
+CRUD
+
+Create (INSERT)
+Read (SELECT)
+Update (UPDATE)
+Delete (DELETE)
+
+DELETE는 롤백 가능
+TRUNCATE는 롤백 불가능
+
+//
+
+딜리트 작성법
+DELETE FROM 테이블명 [WHERE 조건];
+DELETE 문은 데이터를 영구적으로 삭제합니다. 삭제하기 전에 백업을 수행하는 것이 좋습니다.
+WHERE 절 없이 DELETE 문을 실행하면 테이블의 모든 데이터가 삭제됩니다. 주의해서 사용하십시오.
+
+//
+
+DQL, DML, TCL, DDL, DCL
+
+1. DQL (Data Query Language): 데이터 쿼리 언어
+정의: 데이터베이스에서 데이터를 검색하고 조회하는 데 사용하는 언어입니다.
+대표적인 명령어: SELECT
+
+2. DML (Data Manipulation Language): 데이터 조작 언어
+정의: 데이터베이스의 데이터를 추가, 수정, 삭제하는 데 사용하는 언어입니다.
+대표적인 명령어: INSERT, UPDATE, DELETE
+
+3. TCL(Transaction Control Language) : 트랜잭션 제어 언어
+Transaction : 업무, 처리
+
+ TRANSACTION이란?
+ - 데이터베이스의 논리적 연산 단위
+ 
+ - 데이터 변경 사항을 묶어 하나의 트랜잭션에 담아 처리함.
+
+ - 트랜잭션의 대상이 되는 데이터 변경 사항 : INSERT, UPATE, DELETE (DML)
+
+4. DDL(DATA DEFINITION LANGUAGE) : 데이터 정의 언어
+  
+ 객체(OBJECT)를 만들고(CREATE), 수정(ALTER)하고, 삭제(DROP) 등
+ 데이터의 전체 구조를 정의하는 언어로 주로 DB관리자, 설계자가 사용함
+
+ 오라클에서의 객체 : 테이블(TABLE), 뷰(VIEW), 시퀀스(SEQUENCE),
+                   인덱스(INDEX), 패키지(PACKAGE), 트리거(TRIGGER)
+                   프로시져(PROCEDURE), 함수(FUNCTION),
+                   동의어(SYNONYM), 사용자(USER)
+
+5. DCL (Data Control Language): 데이터 제어 언어
+
+정의: 데이터베이스 사용자의 권한을 부여, 취소, 관리하는 데 사용하는 언어입니다.
+대표적인 명령어: GRANT, REVOKE
+//
+
+
+
+제약 조건(CONSTRAINTS) 상세 설명
+**제약 조건(CONSTRAINTS)**은 사용자가 원하는 조건의 데이터만 유지하기 위해 특정 컬럼에 설정하는 규칙입니다. 데이터베이스의 데이터 무결성을 보장하는 데 중요한 역할을 합니다.
+
+목적:
+
+입력 데이터의 유효성 검사: 오류 데이터 입력 방지
+데이터 수정/삭제 제어: 데이터 무결성 유지
+데이터베이스 관리 효율성 증대
+종류:
+
+PRIMARY KEY: 테이블 내에서 각 행을 고유하게 식별하는 컬럼.
+특징:
+1개 이상의 컬럼으로 구성 가능
+NULL 값 허용 불가
+중복 값 허용 불가
+테이블에 하나만 존재 가능
+예시:
+USER_ID 컬럼을 PRIMARY KEY로 설정하면, 동일한 ID를 가진 사용자가 두 명 이상 존재할 수 없음.
+NOT NULL: 컬럼 값이 반드시 존재해야 함.
+특징:
+NULL 값 허용 불가
+PRIMARY KEY 제약 조건과 함께 사용되는 경우가 많음
+예시:
+USER_NAME 컬럼에 NOT NULL 제약 조건을 설정하면, 사용자 이름을 반드시 입력해야 함.
+UNIQUE: 컬럼 값이 테이블 내에서 고유해야 함.
+특징:
+NULL 값 허용 가능
+PRIMARY KEY 제약 조건과 유사하지만, NULL 값 허용 여부에서 차이점
+테이블에 여러 개 설정 가능
+예시:
+EMAIL 컬럼에 UNIQUE 제약 조건을 설정하면, 동일한 이메일 주소를 가진 사용자가 두 명 이상 존재할 수 없음.
+CHECK: 컬럼 값이 특정 조건을 만족해야 함.
+특징:
+사용자 정의 조건 설정 가능
+데이터 유효성 검사에 유용
+예시:
+AGE 컬럼에 CHECK (AGE >= 18) 제약 조건을 설정하면, 사용자 나이가 18세 이상만 허용.
+FOREIGN KEY: 다른 테이블의 PRIMARY KEY와 참조 관계를 설정하는 제약 조건.
+특징:
+데이터베이스 간 데이터 무결성 유지에 중요
+참조 무결성(referential integrity) 보장
+예시:
+ORDER_TABLE 테이블의 USER_ID 컬럼이 USER_TEST 테이블의 USER_ID 컬럼을 참조하는 FOREIGN KEY 제약 조건 설정.
+제약 조건 설정 방법:
+
+DDL (Data Definition Language) 사용
+CREATE TABLE, ALTER TABLE 문 사용
+제약 조건 삭제 방법:
+
+DDL 사용
+DROP CONSTRAINT 문 사용
