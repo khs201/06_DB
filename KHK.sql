@@ -1,0 +1,33 @@
+-- 유저명 varchar2(100)
+-- varchar2 란 : 숫자 영어 한글 등 모든 문자를 넣을 수 있는 공간
+
+-- PRIMARY KEY : 만들어진 정보에 기본으로 부여되는 키
+CREATE TABLE TB_GRADE(
+	GRADE_CODE VARCHAR2(10) PRIMARY KEY,
+	GRADE_NAME VARCHAR2(20)
+);
+
+CREATE TABLE TB_AREA(
+	AREA_CODE VARCHAR2(10) PRIMARY KEY,
+	AREA_NAME VARCHAR2(20)
+);
+
+-- GRADE에 테이블 데이터 넣기! Insert
+INSERT INTO TB_GRADE (GRADE_CODE, GRADE_NAME) VALUES ('10', '일반회원');
+
+
+
+
+-- TB_MEMBER 테이블 생성
+--CREATE TABLE TB_MEMBER (
+--	-- 유저 아이디 , 유저 패스워드, 유저 이름
+--	MEMBERID VARCHAR2(20) PRIMARY KEY,
+--	MEMBERPWD VARCHAR2(20),
+--	MEMBER_NAME VARCHAR2(50)
+--	GRADE VARCHAR2(10),
+--	AREA_CODE VARCHAR2(10),
+--	FO
+--	-- GRADE와 AREA 연결
+--
+--
+--);

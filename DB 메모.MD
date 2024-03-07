@@ -296,3 +296,40 @@ WHERE DEPT_CODE IS NULL;
  3) GROUP BY - 그룹화
  4) HAVING - 그룹 조건
  6) ORDER BY - 정렬
+
+ //
+
+sqlplus 접속
+
+sys/oracle = oracle 관리자=사용자 
+as
+sysdba = 데이터베이스 생성과 삭제 권한
+
+alter = 수정
+session
+set = 수정하고자 하는 부분
+"_oracle_script" = true;
+
+create = 생성
+user = 생성하고자하는 목표
+아이디명
+identified by 
+비밀번호
+"_oracle_script" = true;
+
+권한 명령어 
+grant = 권한 부여
+connect = 사용자가 데이터베이스에 접속할 수 있는 권한,
+resource = 데이터베이스에 생성하고 사용할 수 있는 권한,
+dba = dbadmin 슈퍼권한
+to 아이디;
+
+ctrl + c = 명령어에서 하고있는 작업을 중단할 때 사용하는 단축키
+exit = 현재 sql에서 컴퓨터로 돌아가고 싶을 때 사용하는 명령어
+
+sqlplus 관리자 권한으로 접속해서
+khk 라는 계정 생성
+비밀번호 kh1234
+
+유저명 varchar2(100)
+varchar2 란 : 숫자 영어 한글 등 모든 문자를 넣을 수 있는 공간
