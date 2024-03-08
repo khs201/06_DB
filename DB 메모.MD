@@ -1,18 +1,111 @@
 Data
-관찰결과로나타난정량적혹은정성적인실제값
+관찰 결과로 나타난정 양적 혹은 정성적인 실제값
 
 정보
-데이터를기반으로의미를부여한것
-
-* 에베레스트의높이: 8848m  Data
-에베레스트는세계에서가장높은산이다. 정보
+데이터를 기반으로 의미를 부여한 것
 
 Database
-한조직에필요한정보를여러응용시스템에서공용할수있도록
-논리적으로연관된데이터를모으고중복되는데이터를최소화하여
-구조적으로통합/저장해놓은것
+한 조직에 필요한 정보를 여러 응용 시스템에서 공용할 수 있도록
+논리적으로 연관된 데이터를 모으고 중복되는 데이터를 최소화하여
+구조적으로 통합/저장 해놓은것.
 
-* 데이터 무결성 : 
+DBMS(DATA BASE MANAGEMENT SYSTEM) : DB 조작, 추출, 정의, 제어 관리 시스템
+
+SQL(STRUCTURED QUERY LANGUAGE) : 구조적 질의 언어, DB의 데이터를 조작, 추출, 정의, 제어하는데 사용되는 데이터 처리 언어
+
+DQL, DML, TCL, DDL, DCL
+
+1. DQL (Data Query Language): 데이터 쿼리 언어
+정의: 데이터베이스에서 데이터를 검색하고 조회하는 데 사용하는 언어입니다.
+대표적인 명령어: SELECT
+
+2. DML (Data Manipulation Language): 데이터 조작 언어
+정의: 데이터베이스의 데이터를 추가, 수정, 삭제하는 데 사용하는 언어입니다.
+대표적인 명령어: INSERT, UPDATE, DELETE
+
+3. TCL(Transaction Control Language) : 트랜잭션 제어 언어
+Transaction : 업무, 처리
+대표적인 명령어 : COMMIT, ROLLBACK
+
+ TRANSACTION이란?
+ - 데이터베이스의 논리적 연산 단위
+ 
+ - 데이터 변경 사항을 묶어 하나의 트랜잭션에 담아 처리함.
+
+ - 트랜잭션의 대상이 되는 데이터 변경 사항 : INSERT, UPATE, DELETE (DML)
+
+4. DDL(DATA DEFINITION LANGUAGE) : 데이터 정의 언어
+  
+ 객체(OBJECT)를 만들고(CREATE), 수정(ALTER)하고, 삭제(DROP) 등
+ 데이터의 전체 구조를 정의하는 언어로 주로 DB관리자, 설계자가 사용함
+
+ 오라클에서의 객체 : 테이블(TABLE), 뷰(VIEW), 시퀀스(SEQUENCE),
+                   인덱스(INDEX), 패키지(PACKAGE), 트리거(TRIGGER)
+                   프로시져(PROCEDURE), 함수(FUNCTION),
+                   동의어(SYNONYM), 사용자(USER)
+
+5. DCL (Data Control Language): 데이터 제어 언어
+
+정의: 데이터베이스 사용자의 권한을 부여, 취소, 관리하는 데 사용하는 언어입니다.
+대표적인 명령어: GRANT, REVOKE
+
+//
+
+[JOIN]
+- [INNER] JOIN : 같은 컬럼 값을 가진 행들끼리 연결(INNER는 생략 가능, 기본값이기 때문)
+- LEFT [OUTER] JOIN : 왼쪽 테이블의 모든 행이 결과에 포함
+- RIGHT [OUTER] JOIN : 오른쪽 테이블의 모든 행이 결과에 포함
+
+[INSERT문 작성법]
+1)
+INSERT INTO 테이블명
+VALUES(값...)
+
+2)
+INSERT INTO 테이블명(컬럼명...)
+VALUES(값...)
+
+3)
+INSERT INTO 테이블명 (서브쿼리)
+
+[UPDATE문 작성법]
+UPDATE 테이블
+SET 컬럼명 = 변경값, 
+    컬럼명 = 변경값,
+WHERE 조건;    
+
+[DELETE문 작성법]
+DELETE FROM 테이블명
+WHERE 조건;
+
+[DB 자료형]
+
+- NUMBER : 숫자
+- DATE : 날짜
+- CHAR : 고정 길이 문자형(2000 BYTE)
+- VARCHAR2 : 가변 길이 문자형(4000 BYTE)
+
+[제약 조건]
+
+- NOT NULL (컬럼 레벨로만 설정 가능!)
+- UNIQUE
+- PRIMARY KEY (식별자 역할)
+- FOREIGN KEY
+- CHECK
+
+[테이블 생성 시 제약 조건 설정 방법]
+
+- 제약 조건만 작성 -> 자동으로 제약 조건명이 설정(SYS_C23123어쩌고)
+
+- CONSTRAINT 제약조건명 제약조건
+  -> 지정된 제약 조건명으로 제약조건 생성
+
+[FOREIGN KEY]
+
+- 부모 테이블의 컬럼 값을 참조해서 자식 테이블 컬럼에 작성하는 제약
+  -> (부모의 값이나 NULL만 자식 테이블에 작성 가능!)
+
+
 
 //
 
@@ -126,9 +219,7 @@ SELECT : 지정된 테이블에서 원하는 데이터를 선택해서 조회하
 -- * WHERE절 GROUP BY절을 혼합하여 사용
 --> WHERE절은 각 컬럼 값에 대한 조건 (SELECT문 해석 순서를 잘 기억하는 것이 중요!!)
 
-
 -- EMPLOYEE 테이블에서 부서코드가 'D5', 'D6'인 부서의 평균 급여 조회
-
 
 -- EMPLOYEE 테이블에서 직급 별 2000년도 이후 입사자들의 급여 합을 조회
 
@@ -142,29 +233,10 @@ SELECT : 지정된 테이블에서 원하는 데이터를 선택해서 조회하
 --  그룹함수가 적용되지 않은 컬럼을 
 --  모두 GROUP BY절에 작성해야함.
 
--- EMPLOYEE 테이블에서 부서 별로 같은 직급인 사원의 급여 합계를 조회하고
--- 부서 코드 오름차순으로 정렬
-
-
--- EMPLOYEE 테이블에서 부서 별로 급여 등급이 같은 직원의 수를 조회하고
--- 부서코드, 급여 등급 오름차순으로 정렬
-
-
-
-
-
 --------------------------------------------------------------------------------------------------------------------------
 
 -- * HAVING 절 : 그룹함수로 구해 올 그룹에 대한 조건을 설정할 때 사용
 -- HAVING 컬럼명 | 함수식 비교연산자 비교값
-
--- 부서별 평균가 급여 3000000원 이상인 부서를 조회하여 부서코드 오름차순으로 정렬
-
-
-
--- 부서별 그룹의 급여 합계 중 9백만원을 초과하는 부서코드와 급여 합계 조회
--- 부서 코드 순으로 정렬
-
 
 
 
@@ -289,7 +361,7 @@ WHERE DEPT_CODE IS NULL;
  *        
  *  4. 조회하려는 데이터 (목적, 요구사항)을 확실하게 파악
 
-해석 순서
+SELECT절 해석 순서
  5) SELECT - 컬럼 지정
  1) FROM + JOIN - 테이블 설정
  2) WHERE - 행선택
@@ -355,41 +427,9 @@ WHERE 절 없이 DELETE 문을 실행하면 테이블의 모든 데이터가 삭
 
 //
 
-DQL, DML, TCL, DDL, DCL
 
-1. DQL (Data Query Language): 데이터 쿼리 언어
-정의: 데이터베이스에서 데이터를 검색하고 조회하는 데 사용하는 언어입니다.
-대표적인 명령어: SELECT
 
-2. DML (Data Manipulation Language): 데이터 조작 언어
-정의: 데이터베이스의 데이터를 추가, 수정, 삭제하는 데 사용하는 언어입니다.
-대표적인 명령어: INSERT, UPDATE, DELETE
 
-3. TCL(Transaction Control Language) : 트랜잭션 제어 언어
-Transaction : 업무, 처리
-
- TRANSACTION이란?
- - 데이터베이스의 논리적 연산 단위
- 
- - 데이터 변경 사항을 묶어 하나의 트랜잭션에 담아 처리함.
-
- - 트랜잭션의 대상이 되는 데이터 변경 사항 : INSERT, UPATE, DELETE (DML)
-
-4. DDL(DATA DEFINITION LANGUAGE) : 데이터 정의 언어
-  
- 객체(OBJECT)를 만들고(CREATE), 수정(ALTER)하고, 삭제(DROP) 등
- 데이터의 전체 구조를 정의하는 언어로 주로 DB관리자, 설계자가 사용함
-
- 오라클에서의 객체 : 테이블(TABLE), 뷰(VIEW), 시퀀스(SEQUENCE),
-                   인덱스(INDEX), 패키지(PACKAGE), 트리거(TRIGGER)
-                   프로시져(PROCEDURE), 함수(FUNCTION),
-                   동의어(SYNONYM), 사용자(USER)
-
-5. DCL (Data Control Language): 데이터 제어 언어
-
-정의: 데이터베이스 사용자의 권한을 부여, 취소, 관리하는 데 사용하는 언어입니다.
-대표적인 명령어: GRANT, REVOKE
-//
 
 
 
@@ -444,3 +484,14 @@ CREATE TABLE, ALTER TABLE 문 사용
 
 DDL 사용
 DROP CONSTRAINT 문 사용
+
+계정(사용자)
+
+- 관리자 계정 : 데이터베이스의 생성과 관리를 담당하는 계정.
+                모든 권한과 책임을 가지는 계정.
+                ex) sys(최고관리자), system(sys에서 권한 몇개 제외된 관리자)
+
+- 사용자 계정 : 데이터베이스에 대하여 질의, 갱신, 보고서 작성 등의
+                작업을 수행할 수 있는 계정으로
+                업무에 필요한 최소한의 권한만을 가지는 것을 원칙으로 한다.
+                ex) bdh계정(각자 이니셜 계정), updown, workbook 등
