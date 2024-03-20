@@ -1,0 +1,23 @@
+1. MEMBERS 테이블의 MEMBER_NAME이 고정 길이 문자열인 CHAR 자료형으로 되어 있음 가변 길이 문자열 VARCHAR2로 자료형을 바꿔야 함
+
+MEMBER_NAME VARCHAR2(30)으로 수정
+
+
+2. BOARDS 테이블의 BOARD_WRITER 컬럼의 FOREIGN KEY 제약 조건 작성법이 잘못 되어 있음
+
+BOARD_WRITER VARCHAR2(20) REFERENCES MEMBERS(MEMBER_ID)로 수정
+
+
+3. BOARDS 테이블의 BOARD_REG_DATE 컬럼의 기본값이 요구 사항과 다르게 작성되어 있음
+
+BOARD_REG_DATE DATE DEFAULT SYSDATE로 수정
+
+
+
+
+
+
+
+
+보드 FOREIGN KEY 로 되어있음 REFERENCES 테이블명 컬럼명으로 수정해야함
+보드 REG DATE 컬럼 'DEFAULT SYSDATE'로 수정해야함
